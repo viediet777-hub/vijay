@@ -1,0 +1,13 @@
+{
+  "name": "viedietpanel",
+  "version": "2.0.0",
+  "description": "viedietpanel - Premium Device Management Console",
+  "main": "index.html",
+  "scripts": {
+    "deploy": "vercel",
+    "dev": "echo 'Just open index.html in browser'"
+  },
+  "keywords": ["vercel", "html", "panel"],
+  "author": "viedietpanel",
+  "license": "ISC"
+}
