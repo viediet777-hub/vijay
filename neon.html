@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Neon — Futuristic Section</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+    :root {
+        --abyss: #020610;
+        --midnight: #06121f;
+        --deep: #0a1f33;
+        --neon: #22d3ee;
+        --azure: #0ea5e9;
+        --ice: #e0f7ff;
+        --violet: #7c3aed;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: Inter, system-ui, sans-serif;
+        background: var(--abyss);
+        color: var(--ice);
+        overflow-x: hidden;
+    }
+    .neon-stage {
+        position: relative;
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 80px 20px;
+        background:
+            radial-gradient(at 50% 0%, rgba(34, 211, 238, 0.10) 0px, transparent 50%),
+            radial-gradient(at 85% 90%, rgba(124, 58, 237, 0.10) 0px, transparent 45%),
+            linear-gradient(180deg, #06121f 0%, #020610 70%, #000000 100%);
+        overflow: hidden;
+    }
+    #neonCanvas {
+        position: absolute; inset: 0;
+        width: 100%; height: 100%;
+        pointer-events: none;
+    }
+    .neon-inner {
+        position: relative; z-index: 2;
+        width: 100%; max-width: 1000px;
+        text-align: center;
+    }
+    .neon-eyebrow {
+        display: inline-block;
+        font-family: Sora, sans-serif;
+        font-size: 12px; letter-spacing: .35em; text-transform: uppercase;
+        color: var(--neon);
+        border: 1px solid rgba(34, 211, 238, .35);
+        border-radius: 999px; padding: 8px 22px; margin-bottom: 34px;
+        background: rgba(34, 211, 238, .06);
+        backdrop-filter: blur(8px);
+        animation: neon-rise .9s ease-out both;
+    }
+    .neon-frame {
+        position: relative;
+        display: inline-block;
+        border-radius: 36px;
+        padding: 26px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        box-shadow: 0 40px 100px rgba(0, 0, 0, .7), inset 0 1px 0 rgba(255,255,255,.12);
+        animation: neon-rise 1s .15s ease-out both;
+    }
+    .neon-frame::before {
+        content: ''; position: absolute; inset: -2px; border-radius: 38px; z-index: -1;
+        background: linear-gradient(135deg, rgba(34,211,238,.5), transparent 35%, transparent 65%, rgba(14,165,233,.5));
+    }
+    .neon-halo {
+        position: absolute; top: 50%; left: 50%;
+        width: 130%; aspect-ratio: 1.6;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(closest-side, rgba(34,211,238,.28), rgba(14,165,233,.10) 55%, transparent 75%);
+        filter: blur(10px);
+        z-index: -1;
+        animation: neon-breathe 5s ease-in-out infinite;
+    }
+    .neon-art {
+        display: block;
+        width: min(620px, 82vw);
+        height: auto;
+        border-radius: 22px;
+        animation: neon-float 6s ease-in-out infinite;
+        filter: drop-shadow(0 30px 60px rgba(0, 0, 0, .8)) drop-shadow(0 0 45px rgba(34, 211, 238, .35));
+    }
+    .neon-title {
+        font-family: Sora, sans-serif;
+        font-weight: 800;
+        font-size: clamp(30px, 5.4vw, 58px);
+        letter-spacing: .04em;
+        margin-top: 40px;
+        background: linear-gradient(100deg, #e0f7ff 20%, #22d3ee 50%, #e0f7ff 80%);
+        -webkit-background-clip: text; background-clip: text; color: transparent;
+        animation: neon-rise 1s .3s ease-out both;
+    }
+    .neon-sub {
+        margin: 16px auto 0; max-width: 560px;
+        color: rgba(224, 247, 255, .62);
+        font-size: clamp(14px, 2vw, 17px); line-height: 1.7;
+        animation: neon-rise 1s .45s ease-out both;
+    }
+    .neon-cta-row {
+        margin-top: 34px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+        animation: neon-rise 1s .6s ease-out both;
+    }
+    .neon-cta {
+        position: relative; overflow: hidden;
+        font-family: Sora, sans-serif; font-weight: 700; font-size: 15px; letter-spacing: .05em;
+        color: #02141f; text-decoration: none;
+        background: linear-gradient(135deg, #22d3ee, #0ea5e9);
+        padding: 15px 42px; border-radius: 16px;
+        box-shadow: 0 14px 36px rgba(34, 211, 238, .35);
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .neon-cta:hover { transform: translateY(-3px); box-shadow: 0 20px 44px rgba(34, 211, 238, .5); }
+    .neon-cta::after {
+        content: ''; position: absolute; top: 0; left: -80%;
+        width: 55%; height: 100%;
+        background: linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent);
+        animation: neon-shine 2.8s infinite;
+    }
+    .neon-ghost {
+        font-family: Sora, sans-serif; font-weight: 600; font-size: 15px;
+        color: var(--ice); text-decoration: none;
+        padding: 15px 42px; border-radius: 16px;
+        border: 1px solid rgba(224, 247, 255, .25);
+        background: rgba(255, 255, 255, .04);
+        backdrop-filter: blur(10px);
+        transition: border-color .2s ease, background .2s ease;
+    }
+    .neon-ghost:hover { border-color: rgba(34, 211, 238, .6); background: rgba(34, 211, 238, .08); }
+    .neon-palette {
+        margin: 44px auto 0; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+        animation: neon-rise 1s .75s ease-out both;
+    }
+    .neon-chip {
+        display: flex; align-items: center; gap: 9px;
+        font-size: 12px; font-family: Sora, sans-serif; letter-spacing: .04em;
+        color: rgba(224, 247, 255, .75);
+        background: rgba(255, 255, 255, .04);
+        border: 1px solid rgba(255, 255, 255, .10);
+        border-radius: 999px; padding: 8px 16px 8px 9px;
+        backdrop-filter: blur(8px);
+    }
+    .neon-dot { width: 20px; height: 20px; border-radius: 50%; box-shadow: 0 0 12px currentColor; }
+    .neon-reflect {
+        margin: 34px auto 0; height: 70px; max-width: 620px;
+        background: radial-gradient(50% 100% at 50% 0%, rgba(34,211,238,.14), transparent 70%);
+        filter: blur(6px);
+    }
+    @keyframes neon-float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-14px); }
+    }
+    @keyframes neon-breathe {
+        0%, 100% { opacity: .75; transform: translate(-50%, -50%) scale(1); }
+        50% { opacity: 1; transform: translate(-50%, -50%) scale(1.06); }
+    }
+    @keyframes neon-rise {
+        from { opacity: 0; transform: translateY(26px); }
+        to { opacity: 1; transform: none; }
+    }
+    @keyframes neon-shine {
+        0% { left: -80%; }
+        55%, 100% { left: 135%; }
+    }
+    @media (max-width: 560px) {
+        .neon-frame { padding: 16px; border-radius: 26px; }
+        .neon-cta, .neon-ghost { width: 100%; text-align: center; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        * { animation: none !important; }
+    }
+</style>
+</head>
+<body>
+<section class="neon-stage">
+    <canvas id="neonCanvas"></canvas>
+    <div class="neon-inner">
+        <span class="neon-eyebrow">Future in motion</span>
+        <div class="neon-frame">
+            <div class="neon-halo"></div>
+            <img class="neon-art" src="./artwork.jpg" alt="Featured neon artwork" onerror="this.style.display='none'" />
+        </div>
+        <h1 class="neon-title">ENERGY IN MOTION</h1>
+        <p class="neon-sub">A cinematic digital experience crafted with light, depth and precision. Built for the future, tuned for every screen.</p>
+        <div class="neon-cta-row">
+            <a class="neon-cta" href="#">Get Started</a>
+            <a class="neon-ghost" href="#">Explore</a>
+        </div>
+        <div class="neon-palette">
+            <span class="neon-chip"><span class="neon-dot" style="color:#22d3ee;background:#22d3ee"></span>#22D3EE</span>
+            <span class="neon-chip"><span class="neon-dot" style="color:#0ea5e9;background:#0ea5e9"></span>#0EA5E9</span>
+            <span class="neon-chip"><span class="neon-dot" style="color:#06121f;background:#06121f;border:1px solid #22d3ee"></span>#06121F</span>
+            <span class="neon-chip"><span class="neon-dot" style="color:#020610;background:#020610;border:1px solid #22d3ee"></span>#020610</span>
+            <span class="neon-chip"><span class="neon-dot" style="color:#e0f7ff;background:#e0f7ff"></span>#E0F7FF</span>
+        </div>
+        <div class="neon-reflect"></div>
+    </div>
+</section>
+<script>
+    (function () {
+        var canvas = document.getElementById("neonCanvas");
+        if (!canvas) return;
+        var ctx = canvas.getContext("2d");
+        var w, h;
+        function size() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = document.querySelector(".neon-stage").offsetHeight;
+        }
+        size();
+        window.addEventListener("resize", size);
+        var dots = [];
+        for (var i = 0; i < 42; i++) {
+            dots.push({
+                x: Math.random(), y: Math.random(),
+                r: Math.random() * 1.6 + 0.5,
+                a: Math.random() * 0.25 + 0.06,
+                sx: (Math.random() - 0.5) * 0.00022,
+                sy: -Math.random() * 0.00028 - 0.00004,
+                ph: Math.random() * 6.28
+            });
+        }
+        var t = 0;
+        (function loop() {
+            t += 0.008;
+            ctx.clearRect(0, 0, w, h);
+            for (var i = 0; i < dots.length; i++) {
+                var d = dots[i];
+                var x = (d.x + Math.sin(t + d.ph) * 0.012 + t * d.sx * 60 % 1 + 1) % 1 * w;
+                var y = (d.y + t * d.sy * 60 % 1 + 1) % 1 * h;
+                var tw = d.a * (0.7 + 0.3 * Math.sin(t * 2 + d.ph));
+                ctx.beginPath();
+                ctx.arc(x, y, d.r, 0, 6.2832);
+                ctx.fillStyle = "rgba(34, 211, 238," + tw.toFixed(3) + ")";
+                ctx.fill();
+            }
+            requestAnimationFrame(loop);
+        })();
+    })();
+</script>
+</body>
+</html>
