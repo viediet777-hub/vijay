@@ -43,6 +43,19 @@
             font-weight: 800 !important;
             letter-spacing: .14em !important;
         }
+        /* tighten VIEDIET + PANEL spacing */
+        #root header .vp-brand-1 { margin-right: -7px !important; }
+        /* mobile: let the top bar slide horizontally so Logout is reachable */
+        @media (max-width: 640px) {
+            #root header > div {
+                overflow-x: auto !important;
+                scrollbar-width: none;
+                -webkit-overflow-scrolling: touch;
+            }
+            #root header > div::-webkit-scrollbar { display: none; }
+            #root header > div > * { flex-shrink: 0; }
+            #root header input { max-width: 38vw; }
+        }
         .vp-brand-1 {
             background: linear-gradient(100deg, #6acfff 10%, #ffffff 50%, #6acfff 90%) !important;
             -webkit-background-clip: text !important;
@@ -20144,18 +20157,6 @@ const _tgAdmins = [];
                             }), r.jsx("span", {
                                 className: "vp-brand-1 vp-pix animate-fade-in",
                                 children: "VIEDIET"
-                            }), r.jsx("span", {
-                                className: "animate-fade-in",
-                                style: {
-                                    animationDelay: "50ms"
-                                },
-                                children: ""
-                            }), r.jsx("span", {
-                                className: "animate-fade-in",
-                                style: {
-                                    animationDelay: "200ms"
-                                },
-                                children: ""
                             }), r.jsxs("span", {
                                 className: "relative animate-fade-in vp-pix",
                                 style: {
